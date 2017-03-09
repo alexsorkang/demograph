@@ -1,4 +1,5 @@
 var express = require('express');
+var ipget = require('iplocation');
 var router = express.Router();
 
 /* GET home page. */
@@ -7,8 +8,10 @@ router.get('/', function(req, res, next) {
      req.connection.remoteAddress || 
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
-  console.log(ip)
-  res.render('index', { title: ip });
+     ipget(ip, (err, result) => {
+      console.log(result)
+      res.render('index', { title: ip });
+     })
 });
 
 module.exports = router;

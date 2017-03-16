@@ -5,6 +5,15 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// connect to database
+const MongoClient = require('mongodb').MongoClient
+var db;
+MongoClient.connect('mongodb://admin:password123@ds131890.mlab.com:31890/demgraph', (err, database) => {
+  if (err) return console.log(err)
+  db = database
+})
+
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 
@@ -21,6 +30,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Make our db accessible to our router
+app.use(function(req,res,next){
+  req.db = db;
+  next();
+});
 
 app.use('/', index);
 app.use('/users', users);

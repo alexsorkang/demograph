@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('demograph:server');
 var http = require('http');
+// const MongoClient = require('mongodb').MongoClient
 
 /**
  * Get port from environment and store in Express.
@@ -25,6 +26,15 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
+// var db;
+
+// MongoClient.connect('mongodb://admin:password123@ds131890.mlab.com:31890/demgraph', (err, database) => {
+//   if (err) return console.log(err)
+//   db = database
+//   db.collection('locations').find().toArray((err1, res) => {
+//     console.log(res);
+//   })
+// })
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);

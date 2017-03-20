@@ -9,10 +9,6 @@ router.get('/', function(req, res, next) {
      req.connection.remoteAddress || 
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
-
-  db.collection('locations').find().toArray((err1, res) => {
-    console.log(res);
-  })
   // { ip: '172.88.99.210',
   // country_code: 'US',
   // country_name: 'United States',
@@ -63,7 +59,12 @@ router.get('/', function(req, res, next) {
 
 
   ipget(ip, (err, result) => {
-    console.log(result)
+    locations = db.collection('locations');
+    locations.insert(ip);
+    locations.find().toArray((err1, res) => {
+      console.log(res);
+    })
+
     res.render('index', { title: ip });
   })
 });

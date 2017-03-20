@@ -59,11 +59,14 @@ router.get('/', function(req, res, next) {
 
 
   ipget(ip, (err, result) => {
-    locations = db.collection('locations');
-    locations.insert(ip);
-    locations.find().toArray((err1, res) => {
-      console.log(res);
-    })
+    if (ip != '::1') {
+      locations = db.collection('locations');
+      locations.insert(ip);
+      locations.find().toArray((err1, res) => {
+        console.log(res);
+      })
+    }
+    
 
     res.render('index', { title: ip });
   })

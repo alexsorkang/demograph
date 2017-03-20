@@ -61,7 +61,7 @@ router.get('/', function(req, res, next) {
   ipget(ip, (err, result) => {
     if (ip != '::1') {
       locations = db.collection('locations');
-      locations.insert(ip);
+      locations.insert(result);
       locations.find().toArray((err1, res) => {
         console.log(res);
       })

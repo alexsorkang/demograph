@@ -9,17 +9,15 @@ router.get('/', function(req, res, next) {
      req.connection.remoteAddress || 
      req.socket.remoteAddress ||
      req.connection.socket.remoteAddress;
-
+  var locations = db.collection('locations');
 
   ipget(ip, (err, result) => {
     if (ip != '::1') {
-      var locations = db.collection('locations');
       locations.insert(result);
-      locations.find().toArray((err1, res) => {
+      locations.find().toArray((err1, result) => {
         res.render('index', { data: res });
       })
     } else {
-      var locations = db.collection('locations');
       locations.find().toArray((err1, result) => {
       res.render('index', { data: result });
       })

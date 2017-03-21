@@ -11,18 +11,23 @@ router.get('/', function(req, res, next) {
      req.connection.socket.remoteAddress;
   var locations = db.collection('locations');
 
-  ipget(ip, (err, result) => {
-    if (ip != '::1') {
-      locations.insert(result);
+  // first get the number of same entries
+  locations.find({ip:ip}).count().then((d) => {
+    console.log(d)
+    // if same entries exist or ip is local, display existing data
+    if (d != 0 || ip == '::1') {
       locations.find().toArray((err1, result1) => {
         res.render('index', { data: result1 });
       })
+    // else store new data
     } else {
-      locations.find().toArray((err1, result1) => {
-      res.render('index', { data: result1 });
+      ipget(ip, (err, result) => {
+        locations.insert(result);
+        locations.find().toArray((err1, result1) => {
+          res.render('index', { data: result1 });
+        })
       })
     }
-
   })
 });
 

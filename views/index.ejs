@@ -1,11 +1,53 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>demgraph</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <div class="container">
+      <div id="tooltip"></div><!-- div to hold tooltip. -->
+      <svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
+    </div>
+
+
+    <script src="/javascripts/uStates.js"></script> <!-- creates uStates. -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+      function tooltipHtml(n, d){ /* function to create html content string in tooltip div. */
+        return "<h4>"+n+"</h4><table>"+
+          "<tr><td>Visitors</td><td>"+(d.val)+"</td></tr>"+
+          "</table>";
+      }
+
+      var sampleData = {};
+      ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
+      "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
+      "MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
+      "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
+      "WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+        .forEach((d) => { 
+          var val=0;
+          sampleData[d]={val:val, color:d3.interpolate("#ffffcc", "#0008ff")(val/10)}; 
+        });
+      var dbData = <%- JSON.stringify(data) %>;
+      dbData.forEach((d) => {
+        if (d.country_code == "US") {
+          sampleData[d.region_code].val += 1;
+          sampleData[d.region_code].color = d3.interpolate("#ffffcc", "#0008ff")(sampleData[d.region_code].val/10)
+        }
+      })
+
+
+      /* draw states on id #statesvg */ 
+      uStates.draw("#statesvg", sampleData, tooltipHtml);
+
+      d3.select(self.frameElement).style("height", "600px"); 
+    </script>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
   </body>
 </html>

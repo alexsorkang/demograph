@@ -14,12 +14,12 @@ router.get('/', function(req, res, next) {
   ipget(ip, (err, result) => {
     if (ip != '::1') {
       locations.insert(result);
-      locations.find().toArray((err1, result) => {
-        res.render('index', { data: res });
+      locations.find().toArray((err1, result1) => {
+        res.render('index', { data: result1 });
       })
     } else {
-      locations.find().toArray((err1, result) => {
-      res.render('index', { data: result });
+      locations.find().toArray((err1, result1) => {
+      res.render('index', { data: result1 });
       })
     }
 

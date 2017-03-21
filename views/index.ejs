@@ -32,6 +32,7 @@
           sampleData[d]={val:val, color:d3.interpolate("#ffffcc", "#0008ff")(val/10)}; 
         });
       var dbData = <%- JSON.stringify(data) %>;
+      // var dbData = <%- data %>;
       dbData.forEach((d) => {
         if (d.country_code == "US") {
           sampleData[d.region_code].val += 1;

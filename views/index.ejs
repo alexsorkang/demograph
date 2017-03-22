@@ -31,14 +31,14 @@
       "WI", "MO", "AR", "OK", "KS", "LS", "VA"]
         .forEach((d) => { 
           var val=0;
-          stateData[d]={val:val, color:d3.interpolate("#ffffcc", "#0008ff")(val/20)}; 
+          stateData[d]={val:val, color:d3.interpolate("#ffffcc", "#0008ff")(val/25)}; 
         });
       var dbData = <%- JSON.stringify(data) %>;
       // var dbData = <%- data %>;
       dbData.forEach((d) => {
         if (d.country_code == "US") {
           stateData[d.region_code].val += 1;
-          stateData[d.region_code].color = d3.interpolate("#ffffcc", "#0008ff")(stateData[d.region_code].val/20)
+          stateData[d.region_code].color = d3.interpolate("#ffffcc", "#0008ff")(stateData[d.region_code].val/25)
         }
       })
       /* draw states on id #statesvg */ 

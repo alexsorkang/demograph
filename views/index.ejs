@@ -24,21 +24,26 @@
           "</table>";
       }
       var stateData = {};
-      ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
+      var states = ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
       "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
       "MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
       "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
       "WI", "MO", "AR", "OK", "KS", "LS", "VA"]
-        .forEach((d) => { 
+
+      states.forEach((d) => { 
           var val=0;
           stateData[d]={val:val, color:d3.interpolate("#ffffcc", "#800026")(val/25)}; 
         });
       var dbData = <%- JSON.stringify(data) %>;
-      // var dbData = <%- data %>;
       dbData.forEach((d) => {
         if (d.country_code == "US") {
-          stateData[d.region_code].val += 1;
-          stateData[d.region_code].color = d3.interpolate("#ffffcc", "#800026")(stateData[d.region_code].val/25)
+          if (d.region_code) {
+            // console.log(d.region_code)
+            // console.log(stateData[d.region_code])
+            // console.log("*****")
+            stateData[d.region_code].val += 1;
+            stateData[d.region_code].color = d3.interpolate("#ffffcc", "#800026")(stateData[d.region_code].val/25)
+          }
         }
       })
       /* draw states on id #statesvg */ 

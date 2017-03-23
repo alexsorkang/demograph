@@ -9,15 +9,23 @@
     <div class="container">
       <div id="tooltip"></div><!-- div to hold tooltip. -->
       <svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
-      <svg width="960" height="600" id="worldsvg"></svg>
+      <!-- <svg width="960" height="600" id="worldsvg"></svg> -->
+      <div id="worldsvg" style="position: relative; width: 960px; height: 800px;"></div>
       <!-- <div id="world" style="position: relative; width: 500px; height: 300px;"></div> -->
     </div>
 
 
     <script src="/javascripts/uStates.js"></script> <!-- creates uStates. -->
-    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+    <script src="javascripts/maps.world.min.js"></script>
     <script>
+
       // this converts the country code from two letter to three
+      var twotothreecc = {BD:"BGD",BE:"BEL",BF:"BFA",BG:"BGR",BA:"BIH",BB:"BRB",WF:"WLF",BL:"BLM",BM:"BMU",BN:"BRN",BO:"BOL",BH:"BHR",BI:"BDI",BJ:"BEN",BT:"BTN",JM:"JAM",BV:"BVT",BW:"BWA",WS:"WSM",BQ:"BES",BR:"BRA",BS:"BHS",JE:"JEY",BY:"BLR",BZ:"BLZ",RU:"RUS",RW:"RWA",RS:"SRB",TL:"TLS",RE:"REU",TM:"TKM",TJ:"TJK",RO:"ROU",TK:"TKL",GW:"GNB",GU:"GUM",GT:"GTM",GS:"SGS",GR:"GRC",GQ:"GNQ",GP:"GLP",JP:"JPN",GY:"GUY",GG:"GGY",GF:"GUF",GE:"GEO",GD:"GRD",GB:"GBR",GA:"GAB",SV:"SLV",GN:"GIN",GM:"GMB",GL:"GRL",GI:"GIB",GH:"GHA",OM:"OMN",TN:"TUN",JO:"JOR",HR:"HRV",HT:"HTI",HU:"HUN",HK:"HKG",HN:"HND",HM:"HMD",VE:"VEN",PR:"PRI",PS:"PSE",PW:"PLW",PT:"PRT",SJ:"SJM",PY:"PRY",IQ:"IRQ",PA:"PAN",PF:"PYF",PG:"PNG",PE:"PER",PK:"PAK",PH:"PHL",PN:"PCN",PL:"POL",PM:"SPM",ZM:"ZMB",EH:"ESH",EE:"EST",EG:"EGY",ZA:"ZAF",EC:"ECU",IT:"ITA",VN:"VNM",SB:"SLB",ET:"ETH",SO:"SOM",ZW:"ZWE",SA:"SAU",ES:"ESP",ER:"ERI",ME:"MNE",MD:"MDA",MG:"MDG",MF:"MAF",MA:"MAR",MC:"MCO",UZ:"UZB",MM:"MMR",ML:"MLI",MO:"MAC",MN:"MNG",MH:"MHL",MK:"MKD",MU:"MUS",MT:"MLT",MW:"MWI",MV:"MDV",MQ:"MTQ",MP:"MNP",MS:"MSR",MR:"MRT",IM:"IMN",UG:"UGA",TZ:"TZA",MY:"MYS",MX:"MEX",IL:"ISR",FR:"FRA",IO:"IOT",SH:"SHN",FI:"FIN",FJ:"FJI",FK:"FLK",FM:"FSM",FO:"FRO",NI:"NIC",NL:"NLD",NO:"NOR",NA:"NAM",VU:"VUT",NC:"NCL",NE:"NER",NF:"NFK",NG:"NGA",NZ:"NZL",NP:"NPL",NR:"NRU",NU:"NIU",CK:"COK",XK:"XKX",CI:"CIV",CH:"CHE",CO:"COL",CN:"CHN",CM:"CMR",CL:"CHL",CC:"CCK",CA:"CAN",CG:"COG",CF:"CAF",CD:"COD",CZ:"CZE",CY:"CYP",CX:"CXR",CR:"CRI",CW:"CUW",CV:"CPV",CU:"CUB",SZ:"SWZ",SY:"SYR",SX:"SXM",KG:"KGZ",KE:"KEN",SS:"SSD",SR:"SUR",KI:"KIR",KH:"KHM",KN:"KNA",KM:"COM",ST:"STP",SK:"SVK",KR:"KOR",SI:"SVN",KP:"PRK",KW:"KWT",SN:"SEN",SM:"SMR",SL:"SLE",SC:"SYC",KZ:"KAZ",KY:"CYM",SG:"SGP",SE:"SWE",SD:"SDN",DO:"DOM",DM:"DMA",DJ:"DJI",DK:"DNK",VG:"VGB",DE:"DEU",YE:"YEM",DZ:"DZA",US:"USA",UY:"URY",YT:"MYT",UM:"UMI",LB:"LBN",LC:"LCA",LA:"LAO",TV:"TUV",TW:"TWN",TT:"TTO",TR:"TUR",LK:"LKA",LI:"LIE",LV:"LVA",TO:"TON",LT:"LTU",LU:"LUX",LR:"LBR",LS:"LSO",TH:"THA",TF:"ATF",TG:"TGO",TD:"TCD",TC:"TCA",LY:"LBY",VA:"VAT",VC:"VCT",AE:"ARE",AD:"AND",AG:"ATG",AF:"AFG",AI:"AIA",VI:"VIR",IS:"ISL",IR:"IRN",AM:"ARM",AL:"ALB",AO:"AGO",AQ:"ATA",AS:"ASM",AR:"ARG",AU:"AUS",AT:"AUT",AW:"ABW",IN:"IND",AX:"ALA",AZ:"AZE",IE:"IRL",ID:"IDN",UA:"UKR",QA:"QAT",MZ:"MOZ"};
+      
       function tooltipHtml(n, d){ /* function to create html content string in tooltip div. */
         return "<h4>"+n+"</h4><table>"+
           "<tr><td>Visitors</td><td>"+(d.val)+"</td></tr>"+
@@ -38,9 +46,6 @@
       dbData.forEach((d) => {
         if (d.country_code == "US") {
           if (d.region_code) {
-            // console.log(d.region_code)
-            // console.log(stateData[d.region_code])
-            // console.log("*****")
             stateData[d.region_code].val += 1;
             stateData[d.region_code].color = d3.interpolate("#ffffcc", "#800026")(stateData[d.region_code].val/25)
           }
@@ -48,8 +53,46 @@
       })
       /* draw states on id #statesvg */ 
       uStates.draw("#statesvg", stateData, tooltipHtml);
-
       d3.select(self.frameElement).style("height", "600px"); 
+
+      // this is the code for the world map
+    
+      var worldmap = new Datamap({
+        element: document.getElementById("worldsvg"),
+        projection: 'mercator',
+        fills: {
+          defaultFill: "#ffffcc",
+          // authorHasTraveledTo: "#fa0fa0"
+        },
+        geographyConfig: {
+          borderWidth: .5,
+          borderOpacity: 1,
+          borderColor: '#a9a9a9'
+        },
+        data: {
+          USA: { fillKey: "authorHasTraveledTo" },
+          JPN: { fillKey: "authorHasTraveledTo" },
+          ITA: { fillKey: "authorHasTraveledTo" },
+          CRI: { fillKey: "authorHasTraveledTo" },
+          KOR: { fillKey: "authorHasTraveledTo" },
+          DEU: { fillKey: "authorHasTraveledTo" },
+        }
+      });
+
+      var colors = d3.scale.category10();
+
+      window.setInterval(function() {
+        worldmap.updateChoropleth({
+          USA: colors(Math.random() * 10),
+          RUS: colors(Math.random() * 100),
+          // AUS: { fillKey: 'authorHasTraveledTo' },
+          BRA: colors(Math.random() * 50),
+          CAN: colors(Math.random() * 50),
+          ZAF: colors(Math.random() * 50),
+          IND: colors(Math.random() * 50),
+        });
+      }, 2000);
+
     </script>
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>

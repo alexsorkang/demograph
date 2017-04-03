@@ -85,7 +85,6 @@
           borderOpacity: 1,
           borderColor: '#a9a9a9',
           popupTemplate: function(geography, data) {
-            console.log(geography.properties)
             return '<div class="hoverinfo">' + '<strong>' + geography.properties.name + '</strong><br>' + 'visitors: ' 
                     + ((countryDataCount[geography.properties.iso])?countryDataCount[geography.properties.iso]:0) + '</div>';
           },
